@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<header class="encabezado">
+  <p class="sobretitulo">Paso 04</p>
+  <h1>Coeficientes del modelo</h1>
+  <div class="escala"></div>
+</header>
+
+<p class="formula">{{ ecuacion }}</p>
+
+<p class="nota">
+  Cada interpretación supone que las demás variables se quedan iguales.
+  El consumo es mensual y las horas de aire acondicionado son por día.
+</p>
+
+<section class="bloque">
+  {% for c in coefs %}
+  <div class="coef">
+    <div>
+      <p class="coef-simbolo">{{ c.simbolo }}</p>
+      <p class="coef-nombre">{{ c.nombre }}</p>
+    </div>
+    <p class="coef-valor">{{ '%.2f'|format(c.valor) }}</p>
+    <p class="coef-texto">{{ c.texto }}</p>
+  </div>
+  {% endfor %}
+</section>
+{% endblock %}

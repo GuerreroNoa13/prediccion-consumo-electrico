@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<header class="encabezado">
+  <p class="sobretitulo">Paso 02</p>
+  <h1>Mostrar y analizar datos</h1>
+  <div class="escala"></div>
+</header>
+
+<section class="bloque">
+  <h2>Primeras 10 filas de {{ total }}</h2>
+  <div class="desplazable">
+    <table class="tabla">
+      <thead>
+        <tr>
+          {% for n in nombres %}<th class="num">{{ n }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for fila in primeras.values %}
+        <tr>
+          {% for v in fila %}<td class="num">{{ v|formato }}</td>{% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2>Promedio, mínimo y máximo</h2>
+  <div class="desplazable">
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th class="num">Promedio</th>
+          <th class="num">Mínimo</th>
+          <th class="num">Máximo</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in resumen %}
+        <tr>
+          <td>{{ r.nombre }}</td>
+          <td class="num">{{ '%.2f'|format(r.media) }}</td>
+          <td class="num">{{ r.minimo|formato }}</td>
+          <td class="num">{{ r.maximo|formato }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2>Correlación entre variables</h2>
+  <p class="nota">
+    Va de -1 a 1. Mientras más cerca de 1, más suben juntas las dos variables.
+    Las celdas más amarillas son las de mayor correlación.
+  </p>
+  <div class="desplazable">
+    <table class="tabla correlacion">
+      <thead>
+        <tr>
+          <th></th>
+          {% for n in nombres %}<th class="num">{{ n }}</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for nombre, valores in filas_correlacion %}
+        <tr>
+          <th>{{ nombre }}</th>
+          {% for v in valores %}
+          <td class="num" style="background: rgba(255, 214, 10, {{ '%.2f'|format((v|abs) * 0.35) }});">{{ '%.2f'|format(v) }}</td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% from "macros.html" import display %}
+
+{% block contenido %}
+<header class="encabezado">
+  <p class="sobretitulo">Paso 07</p>
+  <h1>Evaluar el modelo</h1>
+  <div class="escala"></div>
+</header>
+
+<p>
+  Las métricas se calculan con los {{ total }} hogares de prueba, que el modelo
+  no usó para entrenar.
+</p>
+
+<div class="fila-medidores">
+  {{ display('%.2f'|format(mae), "kWh", "MAE") }}
+  {{ display('%.2f'|format(rmse), "kWh", "RMSE") }}
+  {{ display('%.3f'|format(r2), "", "R²") }}
+</div>
+
+<section class="bloque">
+  <h2>Qué significa cada una</h2>
+
+  <div class="coef">
+    <div>
+      <p class="coef-simbolo">MAE</p>
+      <p class="coef-nombre">error absoluto medio</p>
+    </div>
+    <p class="coef-valor">{{ '%.1f'|format(mae) }}</p>
+    <p class="coef-texto">
+      Promedio de |real − predicho|. En promedio, la predicción se equivoca
+      por {{ '%.1f'|format(mae) }} kWh.
+    </p>
+  </div>
+
+  <div class="coef">
+    <div>
+      <p class="coef-simbolo">RMSE</p>
+      <p class="coef-nombre">raíz del error cuadrático medio</p>
+    </div>
+    <p class="coef-valor">{{ '%.1f'|format(rmse) }}</p>
+    <p class="coef-texto">
+      Parecido al MAE, pero castiga más los errores grandes. Siempre es
+      mayor o igual que el MAE.
+    </p>
+  </div>
+
+  <div class="coef">
+    <div>
+      <p class="coef-simbolo">R²</p>
+      <p class="coef-nombre">coeficiente de determinación</p>
+    </div>
+    <p class="coef-valor">{{ '%.3f'|format(r2) }}</p>
+    <p class="coef-texto">
+      El modelo explica el {{ '%.1f'|format(r2 * 100) }} % de la variación del
+      consumo. Un valor de 1 sería una predicción perfecta.
+    </p>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2>Primeros 10 hogares de prueba</h2>
+  <div class="desplazable">
+    <table class="tabla">
+      <thead>
+        <tr>
+          <th class="num">Consumo real</th>
+          <th class="num">Consumo predicho</th>
+          <th class="num">Error (real − predicho)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for real, predicho, error in filas %}
+        <tr>
+          <td class="num">{{ '%.1f'|format(real) }}</td>
+          <td class="num">{{ '%.1f'|format(predicho) }}</td>
+          <td class="num">{{ '%.1f'|format(error) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p><a class="boton" href="{{ url_for('grafica') }}">Ir al paso 08</a></p>
+</section>
+{% endblock %}

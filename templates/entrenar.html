@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% from "macros.html" import display, matriz %}
+
+{% block contenido %}
+<header class="encabezado">
+  <p class="sobretitulo">Paso 03</p>
+  <h1>Entrenar el modelo</h1>
+  <div class="escala"></div>
+</header>
+
+<p>
+  Se separan los datos al azar: 80 % para entrenar y 20 % para probar.
+  Con los hogares de entrenamiento se arman las matrices y se resuelve
+  la ecuación normal <span class="mono">β = (XᵀX)⁻¹ XᵀY</span>.
+</p>
+
+<form method="post">
+  <button class="boton" type="submit">{% if m %}Entrenar de nuevo{% else %}Entrenar modelo{% endif %}</button>
+</form>
+
+{% if m %}
+<section class="bloque">
+  <h2>División de los datos</h2>
+  <div class="fila-medidores">
+    {{ display(m.train|length, "hogares", "Entrenamiento (80 %)") }}
+    {{ display(m.test|length, "hogares", "Prueba (20 %)") }}
+  </div>
+</section>
+
+<section class="bloque">
+  <h2>Matrices del modelo</h2>
+  <p class="nota">
+    Se muestran solo las primeras filas o columnas. Debajo de cada matriz está su tamaño real.
+  </p>
+
+  <div class="matrices">
+    <div class="matriz-item">
+      <h3><span class="nombre-matriz">X</span> matriz de datos</h3>
+      <p class="nota">Cada fila es un hogar. La primera columna de unos sirve para calcular β₀.</p>
+      {{ matriz(matrices.X, cabecera=["1", "personas", "disp.", "horas A/C", "temp."]) }}
+    </div>
+
+    <div class="matriz-item">
+      <h3><span class="nombre-matriz">Y</span> vector de resultados</h3>
+      <p class="nota">Consumo real de cada hogar, en kWh.</p>
+      {{ matriz(matrices.Y, cabecera=["kWh"]) }}
+    </div>
+  </div>
+
+  <div class="matrices">
+    <div class="matriz-item">
+      <h3><span class="nombre-matriz">Xᵀ</span> matriz transpuesta</h3>
+      <p class="nota">Las filas de X pasan a ser columnas.</p>
+      {{ matriz(matrices.Xt, nombres_filas=["1", "personas", "disp.", "horas A/C", "temp."]) }}
+    </div>
+  </div>
+
+  <div class="matrices">
+    <div class="matriz-item">
+      <h3><span class="nombre-matriz">XᵀX</span> producto</h3>
+      <p class="nota">Matriz cuadrada. Es la que se invierte.</p>
+      {{ matriz(matrices.XtX) }}
+    </div>
+
+    <div class="matriz-item">
+      <h3><span class="nombre-matriz">XᵀY</span> producto</h3>
+      <p class="nota">Vector de 5 filas.</p>
+      {{ matriz(matrices.XtY) }}
+    </div>
+  </div>
+</section>
+
+<section class="bloque">
+  <h2>Resultado: matriz de coeficientes β</h2>
+  <p class="nota">Un coeficiente por cada columna de X. Se calcula en <code>modelo.py</code> con estas líneas:</p>
+  <pre class="codigo">Xt = X.T
+XtX = Xt @ X
+XtY = Xt @ Y
+beta = np.linalg.inv(XtX) @ XtY</pre>
+  <div class="matrices">
+    <div class="matriz-item">
+      <h3><span class="nombre-matriz">β</span> coeficientes</h3>
+      {{ matriz(matrices.beta, nombres_filas=["β₀", "β₁", "β₂", "β₃", "β₄"]) }}
+    </div>
+  </div>
+  <p><a class="boton" href="{{ url_for('coeficientes') }}">Ir al paso 04</a></p>
+</section>
+{% endif %}
+{% endblock %}

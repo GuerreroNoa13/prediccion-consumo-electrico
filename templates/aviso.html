@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<header class="encabezado">
+  <p class="sobretitulo">Paso pendiente</p>
+  <h1>Todavía no se puede</h1>
+  <div class="escala"></div>
+</header>
+
+<p class="aviso">{{ mensaje }}</p>
+<p><a class="boton" href="{{ url_for(destino) }}">{{ texto_boton }}</a></p>
+{% endblock %}

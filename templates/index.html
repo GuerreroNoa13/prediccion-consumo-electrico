@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<header class="encabezado">
+  <p class="sobretitulo">Proyecto de Álgebra Lineal</p>
+  <h1>Predicción del consumo mensual de electricidad</h1>
+  <div class="escala"></div>
+</header>
+
+<p class="intro">
+  Este programa estima cuántos kWh consume un hogar en un mes usando una
+  regresión lineal múltiple. Los coeficientes se calculan con matrices,
+  resolviendo la ecuación normal con NumPy.
+</p>
+
+<section class="bloque">
+  <h2>El modelo</h2>
+  <p class="formula">consumo = β₀ + β₁·personas + β₂·dispositivos + β₃·horas A/C + β₄·temperatura</p>
+  <p class="formula">β = (XᵀX)⁻¹ XᵀY</p>
+</section>
+
+<section class="bloque">
+  <h2>Cómo usarlo</h2>
+  <p>
+    Sigue los pasos del panel izquierdo en orden. El led de cada paso se
+    enciende cuando ya se puede usar: primero se cargan los datos, luego se
+    entrena el modelo y después se pueden ver los coeficientes, predecir y evaluar.
+  </p>
+  <p><a class="boton" href="{{ url_for('cargar') }}">Empezar con el paso 01</a></p>
+</section>
+{% endblock %}

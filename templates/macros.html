@@ -1,0 +1,50 @@
+<!-- display: numero grande amarillo con digitos apagados al fondo -->
+{% macro display(valor, unidad, etiqueta) %}
+<div class="medidor">
+  <p class="etiqueta">{{ etiqueta }}</p>
+  <div class="display">
+    <span class="cifras">
+      <span class="fondo">{{ valor|fantasma }}</span>
+      <span class="valor">{{ valor }}</span>
+    </span>
+    <span class="unidad">{{ unidad }}</span>
+  </div>
+</div>
+{% endmacro %}
+
+
+<!-- matriz: tabla con corchetes a los lados -->
+{% macro matriz(datos, cabecera=None, nombres_filas=None) %}
+<div class="matriz-bloque">
+  <div class="corchetes">
+    <table class="matriz">
+      {% if cabecera %}
+      <thead>
+        <tr>
+          {% if nombres_filas %}<th></th>{% endif %}
+          {% for c in cabecera %}<th>{{ c }}</th>{% endfor %}
+          {% if datos.mas_cols %}<th></th>{% endif %}
+        </tr>
+      </thead>
+      {% endif %}
+      <tbody>
+        {% for fila in datos.filas %}
+        <tr>
+          {% if nombres_filas %}<th class="etiqueta">{{ nombres_filas[loop.index0] }}</th>{% endif %}
+          {% for v in fila %}<td>{{ v }}</td>{% endfor %}
+          {% if datos.mas_cols %}<td class="puntos">⋯</td>{% endif %}
+        </tr>
+        {% endfor %}
+        {% if datos.mas_filas %}
+        <tr>
+          {% if nombres_filas %}<th></th>{% endif %}
+          {% for v in datos.filas[0] %}<td class="puntos">⋮</td>{% endfor %}
+          {% if datos.mas_cols %}<td class="puntos">⋱</td>{% endif %}
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+  <p class="forma">{{ datos.forma }}</p>
+</div>
+{% endmacro %}

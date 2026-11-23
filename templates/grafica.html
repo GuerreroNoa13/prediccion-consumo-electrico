@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block contenido %}
+<header class="encabezado">
+  <p class="sobretitulo">Paso 08</p>
+  <h1>Consumo real vs. predicho</h1>
+  <div class="escala"></div>
+</header>
+
+<p>
+  Cada punto es uno de los {{ total }} hogares de prueba. Mientras más cerca
+  esté de la línea punteada, mejor fue la predicción.
+</p>
+
+<div class="grafica">
+  <img src="{{ url_for('static', filename='grafica.png') }}?v={{ version }}"
+       alt="Gráfica de dispersión del consumo real contra el consumo predicho">
+</div>
+
+<p class="nota">R² = {{ '%.3f'|format(r2) }}. La imagen también queda guardada en la carpeta static como grafica.png.</p>
+{% endblock %}

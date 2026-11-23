@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Medidor de consumo{% endblock %}</title>
+
+  <!-- fuentes: JetBrains Mono para los datos e IBM Plex Sans para los textos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='estilo.css') }}">
+</head>
+<body>
+  <div class="tablero">
+
+    <!-- panel lateral con los 8 pasos -->
+    <nav class="panel">
+      <a class="marca" href="{{ url_for('inicio') }}">
+        <span class="marca-sup">kWh</span>
+        <span class="marca-inf">Consumo del hogar</span>
+      </a>
+
+      <ol class="pasos">
+        {% for numero, nombre, destino in pasos %}
+        <li class="{% if pagina_actual == destino %}activo{% endif %} {% if not disponible(numero) %}bloqueado{% endif %}">
+          <a href="{{ url_for(destino) }}">
+            <span class="num">{{ '%02d' % numero }}</span>
+            <span class="nombre">{{ nombre }}</span>
+            <!-- led encendido = el paso ya se puede usar -->
+            <span class="led"></span>
+          </a>
+        </li>
+        {% endfor %}
+      </ol>
+    </nav>
+
+    <!-- aqui va el contenido de cada pagina -->
+    <main class="contenido">
+      {% block contenido %}{% endblock %}
+    </main>
+
+  </div>
+</body>
+</html>
